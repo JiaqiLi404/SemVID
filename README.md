@@ -10,4 +10,4 @@ python -m http.server 8000
 
 Then visit <http://localhost:8000>.
 
-The `gh-pages` branch is published at <https://jiaqili404.github.io/SemVID/>.
+After GitHub Pages is enabled for the `gh-pages` branch, the site is available at <https://jiaqili404.github.io/SemVID/>.
