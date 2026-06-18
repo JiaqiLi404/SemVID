@@ -9,7 +9,7 @@
   <meta property="og:description" content="Keeping the Evidence Chain for efficient video temporal grounding.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jiaqili404.github.io/SemVID/">
-  <meta property="og:image" content="https://jiaqili404.github.io/SemVID/assets/motivation.png">
+  <meta property="og:image" content="https://jiaqili404.github.io/SemVID/assets/overview-motivation.png">
   <meta name="twitter:card" content="summary_large_image">
   <title>SemVID — Keeping the Evidence Chain</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -74,7 +74,6 @@
           <div><strong>95.4%</strong><span>accuracy retained</span></div>
           <div><strong>5.8×</strong><span>prefill speedup</span></div>
           <div><strong>8.7%</strong><span>of original FLOPs</span></div>
-          <div><strong>12.5%</strong><span>visual tokens kept</span></div>
         </div>
       </div>
     </section>
@@ -88,7 +87,7 @@
         </div>
 
         <figure class="paper-figure featured-figure reveal">
-          <img src="assets/motivation.png" width="2800" height="1575" alt="Paper motivation figure comparing VideoQA and video temporal grounding token pruning objectives.">
+          <img src="assets/overview-motivation.png" width="2800" height="1457" alt="Paper motivation figure comparing VideoQA and video temporal grounding token pruning objectives.">
           <figcaption>Existing pruning objectives optimize visual redundancy, saliency, or local query relevance. SemVID instead preserves the evidence needed to localize an event and the temporal routes that connect it.</figcaption>
         </figure>
 
@@ -245,15 +244,6 @@
             <img loading="lazy" src="assets/vis_attention.png" width="2800" height="1575" alt="Attention landing maps for VisionZip, FastVID, and SemVID at different pruning ratios.">
             <figcaption><strong>Attention landing.</strong> Even at low budgets, SemVID retains attention on decisive evidence such as the hands and red bag, whereas competing methods progressively lose it.</figcaption>
           </figure>
-        </div>
-
-        <div class="metric-lab reveal">
-          <div>
-            <p class="kicker">Reproduce the analysis</p>
-            <h3>Evidence metrics are part of the open suite.</h3>
-            <p>The repository includes the paper’s Evidence Retention and Connectivity Strength implementation, plus the evaluator hooks needed to export per-sample attention metrics.</p>
-          </div>
-          <a class="button button-primary" href="https://github.com/JiaqiLi404/SemVID/blob/main/docs/ANALYSIS.md">Analysis guide <span aria-hidden="true">→</span></a>
         </div>
 
         <div class="transfer-card reveal">
