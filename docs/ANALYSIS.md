@@ -1,12 +1,9 @@
 # Evidence Retention and Connectivity Strength
 
-The original ER/CS implementation has been extracted from the Qwen evaluator into [`analysis/evidence_metrics.py`](../analysis/evidence_metrics.py). The evaluator imports these functions directly, so online metric generation and offline aggregation share one implementation.
 
-## What is computed
-
-- `compute_landing_distribution`: propagates query evidence backward through sparse visual self-attention (Eq. 14).
-- `compute_connectivity_strength`: sums retained adjacent-frame transition mass per layer (Eqs. 12, 13, and 15).
-- `compute_evidence_cross_entropy`: computes the full/pruned evidence cross-entropy term used by ER (Eq. 11).
+- `compute_landing_distribution`: propagates query evidence backward through sparse visual self-attention .
+- `compute_connectivity_strength`: sums retained adjacent-frame transition mass per layer.
+- `compute_evidence_cross_entropy`: computes the full/pruned evidence cross-entropy term used by ER.
 - `evidence_retention_score`: applies the paper's reporting transform, `exp(-cross_entropy) × 10,000`.
 
 Evidence analysis is implemented for the instrumented Qwen3 SemVID model.

@@ -1,6 +1,6 @@
 <div align="center">
 
-# Open Visual-Pruning Suite (SemVID)
+# [ECCV 2026] Open Visual-Pruning Suite (SemVID)
 
 ### Keeping the Evidence Chain: Semantic Evidence Allocation for Training-Free Token Pruning in Video Temporal Grounding
 
@@ -9,7 +9,7 @@
 [![Transformers](https://img.shields.io/badge/Transformers-4.57.1-FFD21E.svg)](docs/INSTALLATION.md)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 
-[Paper](https://arxiv.org/pdf/2603.05663) · [Installation](docs/INSTALLATION.md) · [Data](docs/DATA.md) · [Evaluation](docs/EVALUATION.md) · [ER/CS Analysis](docs/ANALYSIS.md)
+[Paper](https://arxiv.org/pdf/2603.05663) · [Installation](docs/INSTALLATION.md) · [Data](docs/DATA.md) · [Evaluation](docs/EVALUATION.md)
 
 </div>
 
@@ -46,17 +46,37 @@ See [Installation](docs/INSTALLATION.md) for CUDA, FFmpeg, hardware, and trouble
 
 ### 2. Prepare data
 
-Place datasets under `data/` or keep them anywhere and pass their common parent with `--data-root`:
+Open the matching preset under [`configs/_base_/datasets`](configs/_base_/datasets) and set `eval_data_path` and `eval_video_folder` to your annotation and video locations. LongVideoBench also requires `subtitle_folder`:
+
+```python
+# configs/_base_/datasets/charades_sta.py
+eval_args = dict(
+    eval_data_path="/path/to/Charades/sta_annotation/charades_sta_test.txt",
+    eval_video_folder="/path/to/Charades/rgb_videos_30fps_480",
+    # Keep the remaining released settings unchanged.
+)
+```
+
+Alternatively, keep the portable defaults and mirror this layout under one root:
 
 ```text
 data/
-|-- charades_sta/
-|-- activitynet_grounding/
-|-- videomme/
-`-- longvideobench/
+|-- ActivityNet/
+|   |-- captions/val_2.json
+|   `-- rgb_videos_15fps_short256/
+|-- Charades/
+|   |-- sta_annotation/charades_sta_test.txt
+|   `-- rgb_videos_30fps_480/
+|-- VideoMME/
+|   |-- test-00000-of-00001.parquet
+|   `-- data/
+`-- LongVideoBench/
+    |-- lvb_val.json
+    |-- videos/
+    `-- subtitles/
 ```
 
-Official download links and the exact folder layout are in [Data preparation](docs/DATA.md).
+Then pass the parent directory with `--data-root`; the launcher rebases annotation, video, and subtitle paths automatically. Official download links, exact layouts, and path rules are in [Data preparation](docs/DATA.md).
 
 ### 3. Evaluate
 
@@ -122,20 +142,17 @@ OpenVPS/
 ## Citation
 
 ```bibtex
-@misc{li2026keeping,
-  title         = {Keeping the Evidence Chain: Semantic Evidence Allocation for Training-Free Token Pruning in Video Temporal Grounding},
-  author        = {Li, Jiaqi and Zheng, Shuntian and Shen, Yixian and Huang, Jia-Hong and Lu, Xiaoman and Ni, Minzhe and Guan, Yu},
-  year          = {2026},
-  eprint        = {2603.05663},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.CV},
-  url           = {https://arxiv.org/abs/2603.05663}
+@article{li2026keeping,
+  title     = {Keeping the Evidence Chain: Semantic Evidence Allocation for Training-Free Token Pruning in Video Temporal Grounding},
+  author    = {Li, Jiaqi and Zheng, Shuntian and Shen, Yixian and Huang, Jia-Hong and Lu, Xiaoman and Ni, Minzhe and Guan, Yu},
+  journal   = {arXiv preprint arXiv:2603.05663},
+  year      = {2026}
 }
 ```
 
 ## Acknowledgements
 
-This project builds on Hugging Face Transformers, Qwen-VL, LLaVA-OneVision, and the visual-token pruning methods included in the suite. Please cite the corresponding projects when using their implementations or results.
+This project builds on [Hugging Face Transformers](https://github.com/huggingface/transformers), [Qwen-VL](https://github.com/QwenLM/Qwen-VL), [LLaVA-OneVision](https://github.com/EvolvingLMMs-Lab/LLaVA-OneVision-2), [OpenTAD](https://github.com/sming256/OpenTAD), and the visual-token pruning methods included in the suite.
 
 ## License
 

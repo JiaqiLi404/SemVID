@@ -252,16 +252,30 @@ def run_eval_with_ray(eval_dataset, eval_cfg, training_args, logger, work_dir, m
         bs_i = eval_bs[shard_id] if isinstance(eval_bs, (list, tuple)) else eval_bs
         futures.append(w.generate_requests.remote(reqs, batch_size=bs_i))
 
-    results_nested: List[List[Dict[str, Any]]] = ray.get(futures)
-    results: List[Dict[str, Any]] = [x for part in results_nested for x in part]
-    logger.info(f"[EVAL] generation done, {len(results)} results, elapsed={time.time() - t0:.2f}s")
+    worker_summaries: List[Dict[str, Any]] = ray.get(futures)
+    num_ok = sum(int(summary.get("num_ok", 0)) for summary in worker_summaries)
+    num_err = sum(int(summary.get("num_err", 0)) for summary in worker_summaries)
+    logger.info(
+        f"[EVAL] generation done, ok={num_ok}, errors={num_err}, "
+        f"elapsed={time.time() - t0:.2f}s"
+    )
+
+    # Workers append predictions to per-worker JSONL files. Consolidate those
+    # records rather than treating each worker's summary dictionary as output.
+    results: List[Dict[str, Any]] = []
+    worker_paths = sorted(glob.glob(os.path.join(work_dir, "pred_worker_*.jsonl")))
+    for worker_path in worker_paths:
+        with open(worker_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    results.append(json.loads(line))
 
     # 保存预测
     pred_path = os.path.join(work_dir, "predictions.jsonl")
     with open(pred_path, "w", encoding="utf-8") as f:
-        for r in results:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    logger.info(f"[EVAL] saved predictions to: {pred_path}")
+        for record in results:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+    logger.info(f"[EVAL] consolidated {len(results)} predictions to: {pred_path}")
     return results
 
 
