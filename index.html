@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="SemVID is a training-free visual token pruning method that preserves semantic evidence chains for video temporal grounding.">
+  <meta property="og:title" content="Open Visual-Pruning Suite (SemVID)">
+  <meta property="og:description" content="Keeping the Evidence Chain for efficient video temporal grounding.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jiaqili404.github.io/SemVID/">
+  <meta property="og:image" content="https://jiaqili404.github.io/SemVID/assets/motivation.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>SemVID — Keeping the Evidence Chain</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="SemVID home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>SemVID</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#citation">Citation</a>
+        <a class="nav-code" href="https://github.com/JiaqiLi404/SemVID">Code <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-glow hero-glow-a" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-b" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="eyebrow"><span>ECCV 2026</span> Open Visual-Pruning Suite</div>
+        <h1>Keeping the <em>Evidence Chain</em></h1>
+        <p class="hero-subtitle">Semantic Evidence Allocation for Training-Free Token Pruning in Video Temporal Grounding</p>
+
+        <p class="authors">
+          <span>Jiaqi Li<sup>1</sup></span>
+          <span>Shuntian Zheng<sup>1</sup></span>
+          <span>Yixian Shen<sup>1</sup></span>
+          <span>Jia-Hong Huang<sup>2</sup></span>
+          <span>Xiaoman Lu<sup>2</sup></span>
+          <span>Minzhe Ni<sup>1</sup></span>
+          <span>Yu Guan<sup>1</sup></span>
+        </p>
+        <p class="affiliations"><sup>1</sup> University of Warwick &nbsp;&nbsp; <sup>2</sup> University of Amsterdam</p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://arxiv.org/abs/2603.05663">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"/></svg>
+            Paper
+          </a>
+          <a class="button button-secondary" href="https://github.com/JiaqiLi404/SemVID">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 9 4 12l4 3M16 9l4 3-4 3M14 6l-4 12"/></svg>
+            Code
+          </a>
+          <a class="button button-ghost" href="#citation">BibTeX</a>
+        </div>
+
+        <div class="headline-stats" aria-label="Headline results">
+          <div><strong>95.4%</strong><span>accuracy retained</span></div>
+          <div><strong>5.8×</strong><span>prefill speedup</span></div>
+          <div><strong>8.7%</strong><span>of original FLOPs</span></div>
+          <div><strong>12.5%</strong><span>visual tokens kept</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section teaser-section" id="overview">
+      <div class="container">
+        <div class="section-heading centered">
+          <p class="kicker">The central observation</p>
+          <h2>Temporal grounding is not frame-level retrieval.</h2>
+          <p>A model must preserve boundary cues and connect evidence across time. A few highly relevant glimpses are not enough.</p>
+        </div>
+
+        <figure class="paper-figure featured-figure reveal">
+          <img src="assets/motivation.png" width="2800" height="1575" alt="Paper motivation figure comparing VideoQA and video temporal grounding token pruning objectives.">
+          <figcaption>Existing pruning objectives optimize visual redundancy, saliency, or local query relevance. SemVID instead preserves the evidence needed to localize an event and the temporal routes that connect it.</figcaption>
+        </figure>
+
+        <div class="problem-grid">
+          <article class="problem-card reveal">
+            <span class="card-index">01</span>
+            <h3>Redundancy can erase boundaries</h3>
+            <p>Visually similar frames may contain brief onset or offset cues that determine the correct temporal window.</p>
+          </article>
+          <article class="problem-card reveal">
+            <span class="card-index">02</span>
+            <h3>Saliency creates empty gaps</h3>
+            <p>Concentrating tokens in a few frames breaks long-range routing through the video sequence.</p>
+          </article>
+          <article class="problem-card reveal">
+            <span class="card-index">03</span>
+            <h3>Relevance can fragment evidence</h3>
+            <p>Repeatedly selecting local query matches produces isolated glimpses instead of a connected event trace.</p>
+          </article>
+        </div>
+
+        <div class="principles">
+          <article class="principle-card retention reveal">
+            <div class="metric-icon" aria-hidden="true">ER</div>
+            <div>
+              <p class="kicker">Principle one</p>
+              <h3>Evidence Retention</h3>
+              <p>Preserve the query-critical landing distribution of the full-token model, especially around temporal boundaries.</p>
+            </div>
+          </article>
+          <article class="principle-card connectivity reveal">
+            <div class="metric-icon" aria-hidden="true">CS</div>
+            <div>
+              <p class="kicker">Principle two</p>
+              <h3>Connectivity Strength</h3>
+              <p>Maintain adjacent-frame attention routes among retained tokens so distant evidence can still be aggregated.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section method-section" id="method">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">Method</p>
+            <h2>Allocate by meaning.<br>Retain by role.</h2>
+          </div>
+          <p>SemVID is training-free. It first distributes the token budget across frames using query evidence and inter-frame variation, then retains complementary object, motion, and context tokens.</p>
+        </div>
+
+        <figure class="paper-figure dark-frame reveal">
+          <img loading="lazy" src="assets/methodology.png" width="2800" height="1575" alt="Overview of SemVID frame-level budget allocation and role-aware token selection.">
+          <figcaption>SemVID builds a compact but continuous representation: query-aligned objects anchor the event, motion tokens relay changes, and context tokens prevent temporal gaps.</figcaption>
+        </figure>
+
+        <div class="role-grid">
+          <article class="role-card object reveal">
+            <span class="role-dot"></span>
+            <p class="role-label">Object tokens</p>
+            <h3>Keep discriminative evidence</h3>
+            <p>Query-to-patch similarity locates relevant objects; maximal marginal relevance avoids spending the budget on near-duplicates.</p>
+          </article>
+          <article class="role-card motion reveal">
+            <span class="role-dot"></span>
+            <p class="role-label">Motion tokens</p>
+            <h3>Carry temporal change</h3>
+            <p>Local feature differences reveal changing regions, while query-aware filtering keeps the changes useful to the event.</p>
+          </article>
+          <article class="role-card context reveal">
+            <span class="role-dot"></span>
+            <p class="role-label">Context tokens</p>
+            <h3>Bridge the sequence</h3>
+            <p>Per-frame prototypes and saliency anchors maintain a minimum evidence path through otherwise low-budget frames.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section results-section" id="results">
+      <div class="container">
+        <div class="section-heading centered light-heading">
+          <p class="kicker">Main results</p>
+          <h2>Aggressive pruning, without losing the event.</h2>
+          <p>Qwen3-VL-4B on ActivityNet Captions with only 12.5% of visual tokens.</p>
+        </div>
+
+        <div class="result-layout">
+          <div class="score-card hero-score reveal">
+            <p>SemVID mIoU</p>
+            <strong>38.49</strong>
+            <span>95.4% of the full-token baseline</span>
+            <div class="meter"><i style="width:95.4%"></i></div>
+          </div>
+          <div class="compact-stats">
+            <article class="score-card reveal"><p>Prefill latency</p><strong>217.7<small> ms</small></strong><span>from 1263.4 ms</span></article>
+            <article class="score-card reveal"><p>Video FLOPs</p><strong>4.8<small> T</small></strong><span>from 59.4 TFLOPs</span></article>
+            <article class="score-card reveal"><p>Charades-STA</p><strong>49.89</strong><span>89.0% retained</span></article>
+            <article class="score-card reveal"><p>Token budget</p><strong>12.5<small>%</small></strong><span>training-free pruning</span></article>
+          </div>
+        </div>
+
+        <div class="comparison-card reveal">
+          <div class="comparison-copy">
+            <p class="kicker">Accuracy–efficiency trade-off</p>
+            <h3>Comparable speed. Much stronger grounding.</h3>
+            <p>FastVID is marginally faster, but SemVID recovers <strong>+5.33 mIoU</strong> by preserving the evidence chain.</p>
+          </div>
+          <div class="comparison-table-wrap">
+            <table>
+              <thead><tr><th>Method</th><th>mIoU ↑</th><th>Prefill ↓</th><th>Speedup ↑</th></tr></thead>
+              <tbody>
+                <tr><td>Full tokens</td><td>40.33</td><td>1263.4 ms</td><td>1.0×</td></tr>
+                <tr><td>VisionZip</td><td>19.89</td><td>895.2 ms</td><td>1.4×</td></tr>
+                <tr><td>FastVID</td><td>33.16</td><td>209.7 ms</td><td>6.0×</td></tr>
+                <tr class="semvid-row"><td><span>SemVID</span></td><td><strong>38.49</strong></td><td>217.7 ms</td><td>5.8×</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="retention-layout">
+          <figure class="paper-figure compact-figure reveal">
+            <img loading="lazy" src="assets/figure_retention_tendency.png" width="1228" height="681" alt="Accuracy retention curves across three visual token budgets and three video grounding benchmarks.">
+            <figcaption>Across three benchmarks and increasingly aggressive budgets, SemVID degrades more gracefully than competing methods.</figcaption>
+          </figure>
+          <div class="insight-stack reveal">
+            <p class="kicker">What the ablations say</p>
+            <h3>The allocation policy is portable.</h3>
+            <p>Replacing FastVID’s uniform allocation with SemVID’s semantic budget raises Charades-STA mIoU from <strong>35.98 to 48.88</strong>.</p>
+            <div class="delta"><span>+12.90</span> mIoU</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section analysis-section" id="analysis">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="kicker">Inside the evidence chain</p>
+            <h2>See what survives.</h2>
+          </div>
+          <p>The analysis makes the mechanism visible: where tokens are allocated, whether intermediate frames stay connected, and where the model’s attention lands after pruning.</p>
+        </div>
+
+        <div class="visual-story">
+          <figure class="paper-figure story-figure reveal">
+            <img loading="lazy" src="assets/vis_budget_allocation.png" width="2800" height="1575" alt="Token budget allocation across frames for ToMe, VScan, FastVID, and SemVID.">
+            <figcaption><strong>Semantic allocation.</strong> SemVID concentrates capacity around the ground-truth event while preserving relay evidence in intermediate frames. Other methods are uniform, collapse onto a few frames, or leave gaps.</figcaption>
+          </figure>
+          <figure class="paper-figure story-figure reveal">
+            <img loading="lazy" src="assets/vis_attention.png" width="2800" height="1575" alt="Attention landing maps for VisionZip, FastVID, and SemVID at different pruning ratios.">
+            <figcaption><strong>Attention landing.</strong> Even at low budgets, SemVID retains attention on decisive evidence such as the hands and red bag, whereas competing methods progressively lose it.</figcaption>
+          </figure>
+        </div>
+
+        <div class="metric-lab reveal">
+          <div>
+            <p class="kicker">Reproduce the analysis</p>
+            <h3>Evidence metrics are part of the open suite.</h3>
+            <p>The repository includes the paper’s Evidence Retention and Connectivity Strength implementation, plus the evaluator hooks needed to export per-sample attention metrics.</p>
+          </div>
+          <a class="button button-primary" href="https://github.com/JiaqiLi404/SemVID/blob/main/docs/ANALYSIS.md">Analysis guide <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="transfer-card reveal">
+          <div>
+            <p class="kicker">Beyond temporal grounding</p>
+            <h3>The same evidence principles transfer to VideoQA.</h3>
+          </div>
+          <div class="transfer-number"><strong>99.7%</strong><span>LongVideoBench accuracy retained<br>with 25% visual tokens</span></div>
+          <div class="transfer-number"><strong>99.4%</strong><span>VideoMME accuracy retained<br>with 25% visual tokens</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section citation-section" id="citation">
+      <div class="container citation-layout">
+        <div>
+          <p class="kicker">Citation</p>
+          <h2>Found this useful?</h2>
+          <p>Please cite our paper and star the repository. It helps others discover the project.</p>
+          <div class="citation-actions">
+            <a class="button button-secondary" href="https://github.com/JiaqiLi404/SemVID">View repository</a>
+            <a class="text-link" href="assets/semvid-paper.pdf">Download PDF <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <div class="bibtex-card">
+          <button class="copy-button" type="button" data-copy-target="bibtex" aria-label="Copy BibTeX">Copy</button>
+          <pre id="bibtex"><code>@article{li2026keeping,
+  title   = {Keeping the Evidence Chain: Semantic Evidence
+             Allocation for Training-Free Token Pruning in
+             Video Temporal Grounding},
+  author  = {Li, Jiaqi and Zheng, Shuntian and Shen, Yixian and
+             Huang, Jia-Hong and Lu, Xiaoman and Ni, Minzhe and
+             Guan, Yu},
+  journal = {arXiv preprint arXiv:2603.05663},
+  year    = {2026}
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><strong>Open Visual-Pruning Suite (SemVID)</strong><br><span>Efficient video understanding without breaking the evidence chain.</span></p>
+      <div class="footer-links">
+        <a href="https://arxiv.org/abs/2603.05663">Paper</a>
+        <a href="https://github.com/JiaqiLi404/SemVID">Code</a>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
