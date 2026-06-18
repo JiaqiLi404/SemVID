@@ -4,12 +4,13 @@
 
 ### Keeping the Evidence Chain: Semantic Evidence Allocation for Training-Free Token Pruning in Video Temporal Grounding
 
+[![Project Page](https://img.shields.io/badge/Project-Page-E5484D.svg?logo=googlechrome&logoColor=white)](https://jiaqili404.github.io/SemVID/)
 [![arXiv](https://img.shields.io/badge/arXiv-2603.05663-b31b1b.svg)](https://arxiv.org/abs/2603.05663)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg)](docs/INSTALLATION.md)
 [![Transformers](https://img.shields.io/badge/Transformers-4.57.1-FFD21E.svg)](docs/INSTALLATION.md)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 
-[Paper](https://arxiv.org/pdf/2603.05663) · [Installation](docs/INSTALLATION.md) · [Data](docs/DATA.md) · [Evaluation](docs/EVALUATION.md)
+[**Project Page**](https://jiaqili404.github.io/SemVID/) · [Paper](https://arxiv.org/pdf/2603.05663) · [Installation](docs/INSTALLATION.md) · [Data](docs/DATA.md) · [Evaluation](docs/EVALUATION.md)
 
 </div>
 
