@@ -1,0 +1,12 @@
+Open Visual-Pruning Suite (SemVID)
+Copyright 2026 Open Visual-Pruning Suite Authors
+
+This product includes modified model implementations derived from the Hugging Face
+Transformers project and Qwen model implementations, distributed under the Apache
+License 2.0. The relevant source files retain their original copyright and license
+headers.
+
+SemVID also contains research adaptations of visual-token pruning methods evaluated
+in the accompanying paper. Their names and citations are provided in README.md and
+the paper. Model weights and datasets are not distributed by this repository and
+remain subject to their respective licenses and terms of use.

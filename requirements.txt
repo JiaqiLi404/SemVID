@@ -1,0 +1,20 @@
+# Install the CUDA build of torch and torchvision first; see README.md.
+torch==2.8.0
+torchvision==0.23.0
+transformers==4.57.1
+accelerate==1.10.1
+datasets==4.1.1
+decord==0.6.0
+einops==0.8.1
+matplotlib==3.10.6
+mmengine==0.10.7
+numpy==2.2.6
+opencv-python-headless==4.11.0.86
+pandas==2.3.2
+peft==0.17.1
+Pillow==11.3.0
+qwen-vl-utils==0.0.14
+ray[default]==2.49.1
+scipy==1.16.2
+torchcodec==0.7.0
+tqdm==4.67.1

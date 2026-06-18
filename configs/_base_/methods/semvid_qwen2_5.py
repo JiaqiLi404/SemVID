@@ -1,0 +1,23 @@
+script_args = dict(
+    model_handler="modeling_qwen2_5_vl_semvid_token.Qwen2_5_VLForConditionalGenerationSemVID",
+    model_hyper_parameters=dict(
+        enable_semantic_prune=True,
+        fastvid_DySeg_c=0,
+        fastvid_DySeg_tau=0,
+        semantic_retention_ratio=0.125,
+        semantic_stage1_topk_segments=2,
+        semantic_stage1_smooth_win=1,
+        semantic_frame_weight_alpha=0.7,
+        semantic_obj_ratio=0.8,
+        semantic_mmr_lambda=0.5,
+        semantic_min_tokens_per_frame=0,
+        semantic_motion_query_beta=0.5,
+        semantic_temporal_anchor_enabled=True,
+        semantic_temporal_anchor_boost=2,
+        semantic_ctx_uniform_tokens=1,
+        semantic_obj_minmax_duplication=True,
+        semantic_obj_anchor_num=4,
+        semantic_obj_anchor_topk=160,
+        semantic_obj_anchor_min_sim=0,
+    ),
+)

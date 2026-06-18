@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments and editors
+.venv/
+venv/
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+
+# Data, models, and experiment artifacts
+data/
+checkpoints/
+outputs/
+logs/
+wandb/
+merged_models/
+attention_map/
+analysis_outputs/
+visualization/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npy
+*.npz
+*.7z
+*.zip
+
+# Local scratch
+tmp/
+*.log
+.DS_Store
+Thumbs.db

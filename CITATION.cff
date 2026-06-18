@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use OpenVPS, please cite our paper."
+title: "Open Visual-Pruning Suite (SemVID)"
+type: software
+authors:
+  - family-names: Li
+    given-names: Jiaqi
+  - family-names: Zheng
+    given-names: Shuntian
+  - family-names: Shen
+    given-names: Yixian
+  - family-names: Huang
+    given-names: Jia-Hong
+  - family-names: Lu
+    given-names: Xiaoman
+  - family-names: Ni
+    given-names: Minzhe
+  - family-names: Guan
+    given-names: Yu
+repository-code: "https://github.com/JiaqiLi404/SemVID"
+url: "https://arxiv.org/abs/2603.05663"
+date-released: 2026-03-05
+license: Apache-2.0
